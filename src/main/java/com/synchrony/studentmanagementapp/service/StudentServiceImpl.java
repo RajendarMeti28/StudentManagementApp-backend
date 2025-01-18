@@ -54,9 +54,9 @@ public class StudentServiceImpl implements IStudentService {
     @PostConstruct
     public void initializeStudents() {
         if (studentRepository.count() == 0) {
-            studentRepository.save(new Student(null, "Rajendar", "24", "12th Grade", "1234567890"));
-            studentRepository.save(new Student(null, "Bantu", "42", "11th Grade", "678543212"));
-            studentRepository.save(new Student(null, "Pushpa", "32", "19th Grade", "234567876"));
+            studentRepository.save(new Student(null, "Rajendar", "24", "12th Grade", "9112123456"));
+            studentRepository.save(new Student(null, "Bantu", "42", "11th Grade", "1232125678"));
+            studentRepository.save(new Student(null, "Pushpa", "32", "19th Grade", "6789765412"));
         }
     }
 

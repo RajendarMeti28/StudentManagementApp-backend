@@ -1,10 +1,13 @@
 package com.synchrony.studentmanagementapp.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.synchrony.studentmanagementapp.entity.Student;
 import com.synchrony.studentmanagementapp.service.IStudentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/students")
@@ -44,19 +49,29 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.addStudent(student);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
-        Student updatedStudent = studentService.updateStudent(id, studentDetails);
-        if (updatedStudent != null) {
-            return ResponseEntity.ok(updatedStudent);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> addStudent(@RequestBody @Valid Student student, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errorMessages = new HashMap<>();
+            result.getFieldErrors().forEach(error -> {
+                errorMessages.put(error.getField(), error.getDefaultMessage());
+            });
+            return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
         }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(student);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody @Valid Student student, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errorMessages = new HashMap<>();
+            result.getFieldErrors().forEach(error -> {
+                errorMessages.put(error.getField(), error.getDefaultMessage());
+            });
+            return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("/{id}")
