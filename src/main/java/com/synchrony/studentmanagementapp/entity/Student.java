@@ -1,6 +1,9 @@
 package com.synchrony.studentmanagementapp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "students")
@@ -10,9 +13,12 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String name;
 
+    @Min(1)
+    @Max(100)
     @Column(nullable = false)
     private String age;
 

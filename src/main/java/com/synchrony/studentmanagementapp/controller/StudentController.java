@@ -26,11 +26,11 @@ public class StudentController {
 
 
     @GetMapping
-    public List<Student> getStudents(@RequestParam(value = "name", required = false) String name) {
-        if (name != null && !name.isEmpty()) {
-            return studentService.searchStudentsByName(name);
-        }
-        return studentService.getAllStudents();
+    public ResponseEntity<List<Student>> getStudents(@RequestParam(value = "name", required = false) String name) {
+        List<Student> students = (name != null && !name.isEmpty()) 
+            ? studentService.searchStudentsByName(name) 
+            : studentService.getAllStudents();
+        return ResponseEntity.ok(students);
     }
  
     @GetMapping("/{id}")
